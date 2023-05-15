@@ -1,5 +1,5 @@
 {
-  "name": "@aksel/structjs",
+  "name": "structjs",
   "version": "2.0.0",
   "description": "Python struct for javascript",
   "main": "struct.mjs",
