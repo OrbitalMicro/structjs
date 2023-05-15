@@ -1,6 +1,6 @@
 /*eslint-env es6*/
-const rechk = /^([<>])?(([1-9]\d*)?([xcbB?hHiIfdsp]))*$/
-const refmt = /([1-9]\d*)?([xcbB?hHiIfdsp])/g
+const rechk = /^([<>])?(([1-9]\d*)?([xcbB?hHiIqQfdsp]))*$/
+const refmt = /([1-9]\d*)?([xcbB?hHiIqQfdsp])/g
 const str = (v,o,c) => String.fromCharCode(
     ...new Uint8Array(v.buffer, v.byteOffset + o, c))
 const rts = (v,o,c,s) => new Uint8Array(v.buffer, v.byteOffset + o, c)
@@ -11,14 +11,16 @@ const lut = le => ({
     x: c=>[1,c,0],
     c: c=>[c,1,o=>({u:v=>str(v, o, 1)      , p:(v,c)=>rts(v, o, 1, c)     })],
     '?': c=>[c,1,o=>({u:v=>Boolean(v.getUint8(o)),p:(v,B)=>v.setUint8(o,B)})],
-    b: c=>[c,1,o=>({u:v=>v.getInt8(   o   ), p:(v,b)=>v.setInt8(   o,b   )})],
-    B: c=>[c,1,o=>({u:v=>v.getUint8(  o   ), p:(v,B)=>v.setUint8(  o,B   )})],
-    h: c=>[c,2,o=>({u:v=>v.getInt16(  o,le), p:(v,h)=>v.setInt16(  o,h,le)})],
-    H: c=>[c,2,o=>({u:v=>v.getUint16( o,le), p:(v,H)=>v.setUint16( o,H,le)})],
-    i: c=>[c,4,o=>({u:v=>v.getInt32(  o,le), p:(v,i)=>v.setInt32(  o,i,le)})],
-    I: c=>[c,4,o=>({u:v=>v.getUint32( o,le), p:(v,I)=>v.setUint32( o,I,le)})],
-    f: c=>[c,4,o=>({u:v=>v.getFloat32(o,le), p:(v,f)=>v.setFloat32(o,f,le)})],
-    d: c=>[c,8,o=>({u:v=>v.getFloat64(o,le), p:(v,d)=>v.setFloat64(o,d,le)})],
+    b: c=>[c,1,o=>({u:v=>v.getInt8(     o   ), p:(v,b)=>v.setInt8(     o,b   )})],
+    B: c=>[c,1,o=>({u:v=>v.getUint8(    o   ), p:(v,B)=>v.setUint8(    o,B   )})],
+    h: c=>[c,2,o=>({u:v=>v.getInt16(    o,le), p:(v,h)=>v.setInt16(    o,h,le)})],
+    H: c=>[c,2,o=>({u:v=>v.getUint16(   o,le), p:(v,H)=>v.setUint16(   o,H,le)})],
+    i: c=>[c,4,o=>({u:v=>v.getInt32(    o,le), p:(v,i)=>v.setInt32(    o,i,le)})],
+    I: c=>[c,4,o=>({u:v=>v.getUint32(   o,le), p:(v,I)=>v.setUint32(   o,I,le)})],
+    q: c=>[c,8,o=>({u:v=>v.getInt64(    o,le), p:(v,q)=>v.setBigInt64( o,q,le)})],
+    Q: c=>[c,8,o=>({u:v=>v.getBigUint64(o,le), p:(v,Q)=>v.setBigUint64(o,Q,le)})],
+    f: c=>[c,4,o=>({u:v=>v.getFloat32(  o,le), p:(v,f)=>v.setFloat32(  o,f,le)})],
+    d: c=>[c,8,o=>({u:v=>v.getFloat64(  o,le), p:(v,d)=>v.setFloat64(  o,d,le)})],
     s: c=>[1,c,o=>({u:v=>str(v,o,c), p:(v,s)=>rts(v,o,c,s.slice(0,c    ) )})],
     p: c=>[1,c,o=>({u:v=>pst(v,o,c), p:(v,s)=>tsp(v,o,c,s.slice(0,c - 1) )})]
 })
